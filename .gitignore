@@ -1,0 +1,16 @@
+.vs
+Debug/
+Release/
+x64/
+x86/
+out/
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.tlog
+*.log
+
+*.exe
+*.user
+*.suo
