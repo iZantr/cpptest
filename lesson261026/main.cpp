@@ -1,43 +1,37 @@
 #include <iostream>
 using namespace std;
-class BankAccount {
+class IntArray {
 private:
-	const int accountId;
-	string owner{"Client"};
-	double balance{ 0.0 };
-	inline static int nextId{ 5001 };
-	inline static int activeAccounts{ 0 };
-	inline static double totalBankVault{ 0.0 };
-public:
-	BankAccount(string ow, double initalDeposit) : accountId{ nextId++ }, owner{ ow },
-		balance{ initalDeposit > 0 ? initalDeposit : 0.0 }
-	{
-		activeAccounts++;
-		totalBankVault += balance;
+	int size{ 0 };
+	int* data{ nullptr };
 
+public:
+	IntArray(int s): size{s}, data{new int [s]{}}{}
+	IntArray(const IntArray& other) :size(other.size), data{ new int[other.size] } {
+		for (int i = 0; i < size; i++) data[i] = other.data[i];
+		cout << "deep copy coppied: " << data << "\n";
 	}
-	BankAccount(string ow) : BankAccount{ ow,0.0 } {};
-	~BankAccount() {
-		activeAccounts--;
-		totalBankVault -= balance;
+	~IntArray() { delete[] data; }
+
+	IntArray& set(int idx, int val) {
+		if (idx >= 0 && idx < size) data[idx] = val;
+		return *this;
 	}
-	void deposit(double amount) {
-		if (amount > 0) {
-			balance += amount;
-			totalBankVault += amount;
+	void print(string label) const {
+		cout << label << "\n";
+		for (int i = 0; i < size; ++i) {
+			cout << data[i];
+			cout << "\n";
 
 		}
 	}
-	static double getBankVault() { return totalBankVault; }
-	static double getActiveAccounts() { return activeAccounts; }
-
-
 };
 
 int main() {
-	cout << BankAccount::getBankVault() << "";
-	BankAccount a1{ "Andriry", 1000.0 };
-	BankAccount a2{ "Olrna", 1000.0 };
-	a1.deposit(500.0);
-	cout << BankAccount::getBankVault() << "";
+	IntArray arr1(3);
+	arr1.set(0, 10).set(1, 20).set(2, 30);
+	IntArray arr2 = arr1;
+	arr2.set(0, 999);
+	arr1.print("original: ");
+	arr2.print("copy: ");
 }
